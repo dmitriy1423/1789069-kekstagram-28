@@ -26,6 +26,7 @@ const imgEffectValue = uploadForm.querySelector('.effect-level__value');
 const effectsList = uploadForm.querySelector('.effects__list');
 
 let slider;
+let isShowErrorMessage = false;
 
 const setEffect = () => {
   const effectValue = uploadOverlay.querySelector('.effects__radio:checked').value;
@@ -129,9 +130,11 @@ const onChangeEffect = (evt) => {
 };
 
 const onFormKeydown = (evt) => {
-  if (isEscapeKey(evt)) {
-    evt.preventDefault();
-    closeForm();
+  if (!isShowErrorMessage) {
+    if (isEscapeKey(evt)) {
+      evt.preventDefault();
+      closeForm();
+    }
   }
 };
 
@@ -178,6 +181,7 @@ const onClickErrorMessageOutside = (evt) => {
 
 function closeErrorMessage () {
   errorMessageElement.remove();
+  isShowErrorMessage = false;
   document.body.removeEventListener('click', onClickErrorMessageOutside);
   document.body.removeEventListener('keydown', onErrorMessageKeydown);
 }
@@ -187,6 +191,7 @@ const showErrorMessage = () => {
   document.body.addEventListener('keydown', onErrorMessageKeydown);
   document.body.addEventListener('click', onClickErrorMessageOutside);
   document.body.append(errorMessageElement);
+  isShowErrorMessage = true;
 };
 
 const blockSubmitButton = () => {
@@ -232,6 +237,7 @@ const setSmallerScale = () => {
 };
 
 export function closeForm () {
+  isShowErrorMessage = false;
   uploadOverlay.classList.add('hidden');
 
   uploadForm.reset();
